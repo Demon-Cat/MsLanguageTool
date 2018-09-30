@@ -30,17 +30,31 @@ SOURCES += \
     codeeditor.cpp \
     LanguageWidget.cpp \
     ExportUntranslated.cpp \
-    ExportNew.cpp
+    ExportNew.cpp \
+    About.cpp \
+    DeveloperMode.cpp \
+    DifferentWidget.cpp
 
 HEADERS += \
         MainWindow.h \
     codeeditor.h \
     LanguageWidget.h \
     ExportUntranslated.h \
-    ExportNew.h
+    ExportNew.h \
+    About.h \
+    DeveloperMode.h \
+    DifferentWidget.h
 
 FORMS += \
         MainWindow.ui \
     LanguageWidget.ui \
     ExportUntranslated.ui \
-    ExportNew.ui
+    ExportNew.ui \
+    About.ui \
+    DeveloperMode.ui \
+    DifferentWidget.ui
+
+RC_FILE += icon.rc
+
+RESOURCES += \
+    MsLanguageTool.qrc
