@@ -16,7 +16,46 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_3">
     <item>
-     <widget class="DeveloperMode" name="widget" native="true"/>
+     <widget class="QSplitter" name="splitter">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="handleWidth">
+       <number>1</number>
+      </property>
+      <property name="childrenCollapsible">
+       <bool>false</bool>
+      </property>
+      <widget class="LanguageWidget" name="widget_language1" native="true"/>
+      <widget class="LanguageWidget" name="widget_language2" native="true"/>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>结果：</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_result"/>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_copy">
+        <property name="text">
+         <string>复制</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -26,7 +65,7 @@
      <x>0</x>
      <y>0</y>
      <width>881</width>
-     <height>23</height>
+     <height>28</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_T">
@@ -65,9 +104,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>DeveloperMode</class>
+   <class>LanguageWidget</class>
    <extends>QWidget</extends>
-   <header>DeveloperMode.h</header>
+   <header>LanguageWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

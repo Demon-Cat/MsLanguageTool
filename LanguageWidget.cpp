@@ -46,6 +46,11 @@ void LanguageWidget::loadFile(const QString &fileName)
     }
     ui->lineEdit_filePath->setText(fileName);
 
+    //
+    QSettings setting(QString("%1/setting.ini").arg(qApp->applicationDirPath()), QSettings::IniFormat);
+    setting.setValue("BasePath", QDir(fileName).absolutePath());
+    setting.setValue(QString("FilePath%1").arg(m_currentIndex + 1), fileName);
+
     //File Watcher
     QStringList watchList = m_fileWatcher->files();
     if (!watchList.isEmpty())
@@ -152,13 +157,16 @@ void LanguageWidget::onFileChanged(const QString &strFile)
 
 void LanguageWidget::on_pushButton_open_clicked()
 {
-    QString strPath = QFileDialog::getOpenFileName(this, "打开文件", "./");
+    QSettings setting(QString("%1/setting.ini").arg(qApp->applicationDirPath()), QSettings::IniFormat);
+    QString basePath = setting.value("BasePath").toString();
+
+    QString strPath = QFileDialog::getOpenFileName(this, "打开文件", basePath);
     if (strPath.isEmpty())
     {
         return;
     }
 
-    QSettings setting("./setting.ini", QSettings::IniFormat);
+    setting.setValue("BasePath", QDir(strPath).absolutePath());
     setting.setValue(QString("FilePath%1").arg(m_currentIndex + 1), strPath);
 
     loadFile(strPath);

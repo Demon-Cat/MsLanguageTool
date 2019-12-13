@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTextStream>
+#include <QRegularExpression>
 
 ExportUntranslated::ExportUntranslated(QWidget *parent) :
     QDialog(parent),

@@ -18,6 +18,9 @@ public:
 private:
 
 private slots:
+    void onLanguageResult(const QString &str);
+    void on_pushButton_copy_clicked();
+
     void on_action_exportUntranslated_triggered();
     void on_action_exportNew_triggered();
 
