@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Exec=/root/qt/MsLanguageTool/bin/MsLanguageTool
+Name=MsLanguage
+GenericName=MsLanguage
+Icon=/root/qt/MsLanguageTool/bin/lan.png
+Terminal=false
+Categories=Development;
