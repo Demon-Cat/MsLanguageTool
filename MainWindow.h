@@ -26,6 +26,8 @@ private slots:
 
     void on_action_about_triggered();
 
+    void on_actionCheckError_triggered();
+
 private:
     Ui::MainWindow *ui;
 };

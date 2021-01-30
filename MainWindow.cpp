@@ -6,6 +6,7 @@
 
 #include "ExportUntranslated.h"
 #include "ExportNew.h"
+#include "checkerror.h"
 #include "About.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -16,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->widget_language1, SIGNAL(sig_result(QString)), this, SLOT(onLanguageResult(QString)));
     connect(ui->widget_language1, SIGNAL(sig_cursorPositionChanged(int,QString)), ui->widget_language2, SLOT(onSetCursorPosition(int,QString)));
+    connect(ui->widget_language2, SIGNAL(sig_cursorPositionChanged(int,QString)), ui->widget_language1, SLOT(onSetCursorPosition(int,QString)));
 
     QSettings setting(QString("%1/setting.ini").arg(qApp->applicationDirPath()), QSettings::IniFormat);
     QString strPath1 = setting.value("FilePath1").toString();
@@ -60,4 +62,10 @@ void MainWindow::on_action_about_triggered()
 {
     About about(this);
     about.exec();
+}
+
+void MainWindow::on_actionCheckError_triggered()
+{
+    CheckError check(this);
+    check.exec();
 }

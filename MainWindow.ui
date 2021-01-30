@@ -75,6 +75,8 @@
     <addaction name="action_exportUntranslated"/>
     <addaction name="separator"/>
     <addaction name="action_exportNew"/>
+    <addaction name="separator"/>
+    <addaction name="actionCheckError"/>
    </widget>
    <widget class="QMenu" name="menu_H">
     <property name="title">
@@ -98,6 +100,11 @@
   <action name="action_about">
    <property name="text">
     <string>关于</string>
+   </property>
+  </action>
+  <action name="actionCheckError">
+   <property name="text">
+    <string>检查错误</string>
    </property>
   </action>
  </widget>

@@ -61,6 +61,7 @@ void LanguageWidget::loadFile(const QString &fileName)
 
     //
     ui->comboBox_filter->clear();
+    QMap<QString, int> m_groupMap;
     QTextStream in(&file);
     while (!in.atEnd())
     {
@@ -70,8 +71,13 @@ void LanguageWidget::loadFile(const QString &fileName)
         if (str.startsWith("["))
         {
             QString strGroup = str.remove(QRegularExpression("[\\[\\]]"));
-            ui->comboBox_filter->addItem(strGroup);
+            m_groupMap.insert(strGroup, 0);
         }
+    }
+    for (auto iter = m_groupMap.constBegin(); iter != m_groupMap.constEnd(); ++iter)
+    {
+        QString text = iter.key();
+        ui->comboBox_filter->addItem(text);
     }
     //
     QTextBlock block = ui->plainTextEdit->document()->findBlockByNumber(currentBlock);
@@ -88,13 +94,23 @@ void LanguageWidget::keyPressEvent(QKeyEvent *event)
     QWidget::keyPressEvent(event);
 }
 
+void LanguageWidget::emitCursorPositionChanged(int blockNumber, const QString &str)
+{
+    if (m_isEmitCursorPositionChange)
+    {
+        emit sig_cursorPositionChanged(blockNumber, str);
+    }
+}
+
 void LanguageWidget::onSetCursorPosition(int blockNumber, const QString &str)
 {
+    m_isEmitCursorPositionChange = false;
     if (str.isEmpty())
     {
         QTextBlock tempBlock = ui->plainTextEdit->document()->findBlockByNumber(blockNumber);
         QTextCursor textCursor(tempBlock);
         ui->plainTextEdit->setTextCursor(textCursor);
+        m_isEmitCursorPositionChange = true;
         return;
     }
     //
@@ -140,6 +156,7 @@ void LanguageWidget::onSetCursorPosition(int blockNumber, const QString &str)
         QTextCursor textCursor(tempBlock);
         ui->plainTextEdit->setTextCursor(textCursor);
     }
+    m_isEmitCursorPositionChange = true;
 }
 
 void LanguageWidget::onFileChanged(const QString &strFile)
@@ -236,7 +253,7 @@ void LanguageWidget::on_plainTextEdit_cursorPositionChanged()
     if (valueList.size() != 2)
     {
         emit sig_result("");
-        emit sig_cursorPositionChanged(currentBlock, strValue);
+        emitCursorPositionChanged(currentBlock, strValue);
         return;
     }
     while (block.isValid())
@@ -254,7 +271,7 @@ void LanguageWidget::on_plainTextEdit_cursorPositionChanged()
         block = block.previous();
     }
 
-    emit sig_cursorPositionChanged(currentBlock, strValue);
+    emitCursorPositionChanged(currentBlock, strValue);
 }
 
 void LanguageWidget::on_plainTextEdit_textChanged()

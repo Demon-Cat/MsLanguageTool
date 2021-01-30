@@ -23,6 +23,9 @@ public:
 protected:
     void keyPressEvent(QKeyEvent *event) override;
 
+private:
+    void emitCursorPositionChanged(int blockNumber, const QString &str);
+
 signals:
     void sig_result(const QString &str);
     void sig_cursorPositionChanged(int blockNumber, const QString &str);
@@ -50,6 +53,7 @@ private:
     QString m_currentGroup;
 
     bool m_detectTextChanged = true;
+    bool m_isEmitCursorPositionChange = true;
 };
 
 #endif // LANGUAGEWIDGET_H
