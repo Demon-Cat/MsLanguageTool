@@ -4,6 +4,7 @@
 #include <QSettings>
 #include <QDir>
 #include <QTextStream>
+#include <QRegularExpression>
 #include <QtDebug>
 
 CheckError::CheckError(QWidget *parent) :

@@ -1,8 +1,10 @@
 [Desktop Entry]
 Type=Application
 Exec=/root/qt/MsLanguageTool/bin/MsLanguageTool
+Path=/root/qt/MsLanguageTool/bin
 Name=MsLanguage
-GenericName=MsLanguage
+GenericName=MsLanguage Tool.
 Icon=/root/qt/MsLanguageTool/bin/lan.png
 Terminal=false
+StartupWMClass=MsLanguageTool
 Categories=Development;
