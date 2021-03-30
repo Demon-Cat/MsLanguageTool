@@ -85,6 +85,7 @@ private slots:
 
 private:
     QWidget *lineNumberArea;
+    int m_rightMargin = 10;
 };
 
 //![codeeditordefinition]

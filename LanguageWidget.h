@@ -1,16 +1,15 @@
 ﻿#ifndef LANGUAGEWIDGET_H
 #define LANGUAGEWIDGET_H
 
-#include <QWidget>
-#include <QMap>
 #include <QFileSystemWatcher>
+#include <QMap>
+#include <QWidget>
 
 namespace Ui {
 class LanguageWidget;
 }
 
-class LanguageWidget : public QWidget
-{
+class LanguageWidget : public QWidget {
     Q_OBJECT
 
 public:

@@ -7,8 +7,7 @@ namespace Ui {
 class CheckError;
 }
 
-class CheckError : public QDialog
-{
+class CheckError : public QDialog {
     Q_OBJECT
 
 public:
@@ -17,7 +16,6 @@ public:
 
 private slots:
     void on_pushButtonOpen_clicked();
-
     void on_pushButtonCheck_clicked();
 
 private:

@@ -1,19 +1,19 @@
 ﻿#include "LanguageWidget.h"
 #include "ui_LanguageWidget.h"
-#include <QtDebug>
+#include <QClipboard>
 #include <QFile>
 #include <QFileDialog>
-#include <QTextStream>
-#include <QMessageBox>
-#include <QClipboard>
-#include <QTextBlock>
-#include <QSettings>
 #include <QKeyEvent>
+#include <QMessageBox>
 #include <QScrollBar>
+#include <QSettings>
+#include <QTextBlock>
+#include <QTextStream>
+#include <QtDebug>
 
-LanguageWidget::LanguageWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::LanguageWidget)
+LanguageWidget::LanguageWidget(QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::LanguageWidget)
 {
     ui->setupUi(this);
 
@@ -39,8 +39,7 @@ void LanguageWidget::loadFile(const QString &fileName)
 
     //
     QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QMessageBox::warning(this, "警告", QString("打开文件失败:%1").arg(file.errorString()));
         return;
     }
@@ -53,8 +52,7 @@ void LanguageWidget::loadFile(const QString &fileName)
 
     //File Watcher
     QStringList watchList = m_fileWatcher->files();
-    if (!watchList.isEmpty())
-    {
+    if (!watchList.isEmpty()) {
         m_fileWatcher->removePaths(m_fileWatcher->files());
     }
     m_fileWatcher->addPath(fileName);
@@ -63,19 +61,16 @@ void LanguageWidget::loadFile(const QString &fileName)
     ui->comboBox_filter->clear();
     QMap<QString, int> m_groupMap;
     QTextStream in(&file);
-    while (!in.atEnd())
-    {
+    while (!in.atEnd()) {
         QString str = in.readLine();
         ui->plainTextEdit->appendPlainText(str);
 
-        if (str.startsWith("["))
-        {
+        if (str.startsWith("[")) {
             QString strGroup = str.remove(QRegularExpression("[\\[\\]]"));
             m_groupMap.insert(strGroup, 0);
         }
     }
-    for (auto iter = m_groupMap.constBegin(); iter != m_groupMap.constEnd(); ++iter)
-    {
+    for (auto iter = m_groupMap.constBegin(); iter != m_groupMap.constEnd(); ++iter) {
         QString text = iter.key();
         ui->comboBox_filter->addItem(text);
     }
@@ -87,8 +82,7 @@ void LanguageWidget::loadFile(const QString &fileName)
 
 void LanguageWidget::keyPressEvent(QKeyEvent *event)
 {
-    if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_S)
-    {
+    if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_S) {
         on_pushButton_save_clicked();
     }
     QWidget::keyPressEvent(event);
@@ -96,8 +90,7 @@ void LanguageWidget::keyPressEvent(QKeyEvent *event)
 
 void LanguageWidget::emitCursorPositionChanged(int blockNumber, const QString &str)
 {
-    if (m_isEmitCursorPositionChange)
-    {
+    if (m_isEmitCursorPositionChange) {
         emit sig_cursorPositionChanged(blockNumber, str);
     }
 }
@@ -105,8 +98,7 @@ void LanguageWidget::emitCursorPositionChanged(int blockNumber, const QString &s
 void LanguageWidget::onSetCursorPosition(int blockNumber, const QString &str)
 {
     m_isEmitCursorPositionChange = false;
-    if (str.isEmpty())
-    {
+    if (str.isEmpty()) {
         QTextBlock tempBlock = ui->plainTextEdit->document()->findBlockByNumber(blockNumber);
         QTextCursor textCursor(tempBlock);
         ui->plainTextEdit->setTextCursor(textCursor);
@@ -118,30 +110,22 @@ void LanguageWidget::onSetCursorPosition(int blockNumber, const QString &str)
     bool found = false;
     bool isGroup = str.startsWith("[");
     QString strKey;
-    if (!isGroup)
-    {
+    if (!isGroup) {
         QStringList strList = str.split("=");
         strKey = strList.at(0);
     }
-    while (block.isValid())
-    {
-        if (isGroup)
-        {
-            if (block.text() == str)
-            {
+    while (block.isValid()) {
+        if (isGroup) {
+            if (block.text() == str) {
                 found = true;
             }
-        }
-        else
-        {
-            if (block.text().left(strKey.size()) == strKey)
-            {
+        } else {
+            if (block.text().left(strKey.size()) == strKey) {
                 found = true;
             }
         }
 
-        if (found)
-        {
+        if (found) {
             QTextCursor textCursor(block);
             ui->plainTextEdit->setTextCursor(textCursor);
             break;
@@ -150,8 +134,7 @@ void LanguageWidget::onSetCursorPosition(int blockNumber, const QString &str)
         block = block.next();
     }
 
-    if (!found)
-    {
+    if (!found) {
         QTextBlock tempBlock = ui->plainTextEdit->document()->findBlockByNumber(blockNumber);
         QTextCursor textCursor(tempBlock);
         ui->plainTextEdit->setTextCursor(textCursor);
@@ -161,13 +144,11 @@ void LanguageWidget::onSetCursorPosition(int blockNumber, const QString &str)
 
 void LanguageWidget::onFileChanged(const QString &strFile)
 {
-    if (isActiveWindow())
-    {
+    if (isActiveWindow()) {
         return;
     }
     int result = QMessageBox::question(this, "提示", QString("文件：%1发生改变，是否重新加载？").arg(strFile));
-    if (result == QMessageBox::Yes)
-    {
+    if (result == QMessageBox::Yes) {
         on_pushButton_reload_clicked();
     }
 }
@@ -178,8 +159,7 @@ void LanguageWidget::on_pushButton_open_clicked()
     QString basePath = setting.value("BasePath").toString();
 
     QString strPath = QFileDialog::getOpenFileName(this, "打开文件", basePath);
-    if (strPath.isEmpty())
-    {
+    if (strPath.isEmpty()) {
         return;
     }
 
@@ -200,8 +180,7 @@ void LanguageWidget::on_pushButton_reload_clicked()
 void LanguageWidget::on_pushButton_save_clicked()
 {
     QFile file(ui->lineEdit_filePath->text());
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-    {
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QMessageBox::warning(this, "警告", QString("打开文件失败:%1").arg(file.errorString()));
         return;
     }
@@ -216,18 +195,12 @@ void LanguageWidget::on_pushButton_save_clicked()
 void LanguageWidget::on_lineEdit_filter_textChanged(const QString &str)
 {
     QTextBlock block = ui->plainTextEdit->document()->begin();
-    while (block.isValid())
-    {
-        if (str.isEmpty())
-        {
+    while (block.isValid()) {
+        if (str.isEmpty()) {
             block.setVisible(true);
-        }
-        else if (block.text().contains(str))
-        {
+        } else if (block.text().contains(str)) {
             block.setVisible(true);
-        }
-        else
-        {
+        } else {
             block.setVisible(false);
         }
         block = block.next();
@@ -238,8 +211,7 @@ void LanguageWidget::on_lineEdit_filter_textChanged(const QString &str)
     QScrollBar *verScrollBar = ui->plainTextEdit->verticalScrollBar();
     verScrollBar->setSliderPosition(verScrollBar->minimum());
 
-    if (str.isEmpty())
-    {
+    if (str.isEmpty()) {
         ui->plainTextEdit->setTextCursor(ui->plainTextEdit->textCursor());
     }
 }
@@ -250,17 +222,14 @@ void LanguageWidget::on_plainTextEdit_cursorPositionChanged()
     QTextBlock block = ui->plainTextEdit->document()->findBlockByNumber(currentBlock);
     QString strValue = block.text();
     QStringList valueList = strValue.split("=");
-    if (valueList.size() != 2)
-    {
+    if (valueList.size() != 2) {
         emit sig_result("");
         emitCursorPositionChanged(currentBlock, strValue);
         return;
     }
-    while (block.isValid())
-    {
+    while (block.isValid()) {
         QString str = block.text().trimmed();
-        if (str.startsWith("[") && str.endsWith("]"))
-        {
+        if (str.startsWith("[") && str.endsWith("]")) {
             m_currentGroup = str.remove(QRegularExpression("[\\[\\]]"));
             QString strResult = QString("GET_TEXT(\"%1/%2\", \"%3\")").arg(m_currentGroup).arg(valueList.at(0)).arg(valueList.at(1));
             emit sig_result(strResult);
@@ -276,8 +245,7 @@ void LanguageWidget::on_plainTextEdit_cursorPositionChanged()
 
 void LanguageWidget::on_plainTextEdit_textChanged()
 {
-    if (m_detectTextChanged)
-    {
+    if (m_detectTextChanged) {
         ui->plainTextEdit->setStyleSheet("QPlainTextEdit{border: 1px solid #FF0000}");
     }
 }
@@ -286,10 +254,8 @@ void LanguageWidget::on_comboBox_filter_activated(const QString &str)
 {
     QTextBlock block = ui->plainTextEdit->document()->begin();
     QString strGroup = QString("[%1]").arg(str);
-    while (block.isValid())
-    {
-        if (block.text() == strGroup)
-        {
+    while (block.isValid()) {
+        if (block.text() == strGroup) {
             QTextCursor textCursor(block);
             ui->plainTextEdit->setTextCursor(textCursor);
         }

@@ -7,8 +7,7 @@ namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
@@ -16,7 +15,6 @@ public:
     ~MainWindow();
 
 private:
-
 private slots:
     void onLanguageResult(const QString &str);
     void on_pushButton_copy_clicked();

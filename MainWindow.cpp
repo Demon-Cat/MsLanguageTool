@@ -1,23 +1,22 @@
 ﻿#include "MainWindow.h"
 #include "ui_MainWindow.h"
-#include <QtDebug>
-#include <QSettings>
-#include <QClipboard>
-
-#include "ExportUntranslated.h"
-#include "ExportNew.h"
-#include "checkerror.h"
 #include "About.h"
+#include "ExportNew.h"
+#include "ExportUntranslated.h"
+#include "checkerror.h"
+#include <QClipboard>
+#include <QSettings>
+#include <QtDebug>
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+    , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
     connect(ui->widget_language1, SIGNAL(sig_result(QString)), this, SLOT(onLanguageResult(QString)));
-    connect(ui->widget_language1, SIGNAL(sig_cursorPositionChanged(int,QString)), ui->widget_language2, SLOT(onSetCursorPosition(int,QString)));
-    connect(ui->widget_language2, SIGNAL(sig_cursorPositionChanged(int,QString)), ui->widget_language1, SLOT(onSetCursorPosition(int,QString)));
+    connect(ui->widget_language1, SIGNAL(sig_cursorPositionChanged(int, QString)), ui->widget_language2, SLOT(onSetCursorPosition(int, QString)));
+    connect(ui->widget_language2, SIGNAL(sig_cursorPositionChanged(int, QString)), ui->widget_language1, SLOT(onSetCursorPosition(int, QString)));
 
     QSettings setting(QString("%1/setting.ini").arg(qApp->applicationDirPath()), QSettings::IniFormat);
     QString strPath1 = setting.value("FilePath1").toString();
