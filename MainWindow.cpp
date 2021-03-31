@@ -4,6 +4,7 @@
 #include "ExportNew.h"
 #include "ExportUntranslated.h"
 #include "checkerror.h"
+#include "message.h"
 #include <QClipboard>
 #include <QSettings>
 #include <QtDebug>
@@ -25,6 +26,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->widget_language1->loadFile(strPath1);
     ui->widget_language2->setIndex(1);
     ui->widget_language2->loadFile(strPath2);
+
+    m_message = new Message(this);
+    m_message->hide();
 
     showMaximized();
 }

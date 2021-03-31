@@ -35,7 +35,8 @@ SOURCES += \
     About.cpp \
     DeveloperMode.cpp \
     DifferentWidget.cpp \
-    checkerror.cpp
+    checkerror.cpp \
+    message.cpp
 
 HEADERS += \
         MainWindow.h \
@@ -46,7 +47,8 @@ HEADERS += \
     About.h \
     DeveloperMode.h \
     DifferentWidget.h \
-    checkerror.h
+    checkerror.h \
+    message.h
 
 FORMS += \
         MainWindow.ui \
@@ -56,7 +58,8 @@ FORMS += \
     About.ui \
     DeveloperMode.ui \
     DifferentWidget.ui \
-    checkerror.ui
+    checkerror.ui \
+    message.ui
 
 RC_FILE += icon.rc
 

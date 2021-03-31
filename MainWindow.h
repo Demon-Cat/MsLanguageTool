@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+class Message;
+
 namespace Ui {
 class MainWindow;
 }
@@ -28,6 +30,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+
+    Message *m_message = nullptr;
 };
 
 #endif // MAINWINDOW_H

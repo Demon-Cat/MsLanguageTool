@@ -62,6 +62,17 @@ CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent)
 
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();
+
+    m_menu = new QMenu(this);
+
+    m_actionAddLine = new QAction("添加一行");
+    connect(m_actionAddLine, &QAction::triggered, this, &CodeEditor::onActionAddLine);
+    m_menu->addAction(m_actionAddLine);
+
+    m_actionBatchAdd = new QAction("批量添加");
+    connect(m_actionBatchAdd, &QAction::triggered, this, &CodeEditor::onActionBatchAdd);
+    m_menu->addAction(m_actionBatchAdd);
+    m_actionBatchAdd->setEnabled(false);
 }
 
 int CodeEditor::lineNumberAreaWidth()
@@ -94,12 +105,48 @@ void CodeEditor::updateLineNumberArea(const QRect &rect, int dy)
         updateLineNumberAreaWidth(0);
 }
 
+void CodeEditor::onActionAddLine()
+{
+    int currentBlock = textCursor().blockNumber();
+    QTextBlock block = document()->findBlockByNumber(currentBlock);
+    QString currentText = block.text();
+    int currentNumber = -1;
+    QRegularExpression re(R"((\d+)=)");
+    while (block.isValid()) {
+        QString text = block.text();
+        QRegularExpressionMatch match = re.match(text);
+        if (match.hasMatch()) {
+            currentNumber = match.captured(1).toInt();
+            break;
+        }
+        block = block.previous();
+    }
+    if (currentNumber > 0) {
+        currentNumber++;
+        if (currentText.isEmpty()) {
+            insertPlainText(QString("%1=\n").arg(currentNumber));
+        } else {
+            insertPlainText(QString("\n%1=").arg(currentNumber));
+        }
+    }
+}
+
+void CodeEditor::onActionBatchAdd()
+{
+
+}
+
 void CodeEditor::resizeEvent(QResizeEvent *e)
 {
     QPlainTextEdit::resizeEvent(e);
 
     QRect cr = contentsRect();
     lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
+}
+
+void CodeEditor::contextMenuEvent(QContextMenuEvent *e)
+{
+    m_menu->exec(e->globalPos());
 }
 
 void CodeEditor::highlightCurrentLine()

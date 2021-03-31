@@ -1,5 +1,6 @@
 ﻿#include "LanguageWidget.h"
 #include "ui_LanguageWidget.h"
+#include "message.h"
 #include <QClipboard>
 #include <QFile>
 #include <QFileDialog>
@@ -63,7 +64,6 @@ void LanguageWidget::loadFile(const QString &fileName)
     QTextStream in(&file);
     while (!in.atEnd()) {
         QString str = in.readLine();
-        ui->plainTextEdit->appendPlainText(str);
 
         if (str.startsWith("[")) {
             QString strGroup = str.remove(QRegularExpression("[\\[\\]]"));
@@ -75,6 +75,8 @@ void LanguageWidget::loadFile(const QString &fileName)
         ui->comboBox_filter->addItem(text);
     }
     //
+    in.device()->seek(0);
+    ui->plainTextEdit->setPlainText(in.readAll());
     QTextBlock block = ui->plainTextEdit->document()->findBlockByNumber(currentBlock);
     ui->plainTextEdit->setTextCursor(QTextCursor(block));
     m_detectTextChanged = true;
@@ -147,8 +149,8 @@ void LanguageWidget::onFileChanged(const QString &strFile)
     if (isActiveWindow()) {
         return;
     }
-    int result = QMessageBox::question(this, "提示", QString("文件：%1发生改变，是否重新加载？").arg(strFile));
-    if (result == QMessageBox::Yes) {
+    int result = Message::question(QString("文件：%1发生改变，是否重新加载？").arg(strFile));
+    if (result == Message::Yes) {
         on_pushButton_reload_clicked();
     }
 }
@@ -175,6 +177,8 @@ void LanguageWidget::on_pushButton_reload_clicked()
 {
     loadFile(ui->lineEdit_filePath->text());
     on_lineEdit_filter_textChanged(ui->lineEdit_filter->text());
+
+    ui->plainTextEdit->setStyleSheet("");
 }
 
 void LanguageWidget::on_pushButton_save_clicked()
@@ -246,7 +250,7 @@ void LanguageWidget::on_plainTextEdit_cursorPositionChanged()
 void LanguageWidget::on_plainTextEdit_textChanged()
 {
     if (m_detectTextChanged) {
-        ui->plainTextEdit->setStyleSheet("QPlainTextEdit{border: 1px solid #FF0000}");
+        ui->plainTextEdit->setStyleSheet("QPlainTextEdit{border: 2px solid #FF0000}");
     }
 }
 
